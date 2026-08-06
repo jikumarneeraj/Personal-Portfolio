@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neeraj Kumar | AI & ML Engineer Portfolio</title>
+  <meta name="description" content="AI & ML Career Portfolio of Neeraj Kumar, GATE 2026 CSE Qualified, pursuing BS in Data Science from IIT Madras & B.Tech from REC Bijnor. Explore interactive AI training simulations, data science projects, and technical skills.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient background glow particles -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <!-- Header / Navigation -->
+  <header id="main-header">
+    <div class="container nav-container">
+      <a href="#" class="logo">
+        <div class="logo-title">
+          <span class="logo-accent">&lt;</span>Neeraj Kumar<span class="logo-accent"> /&gt;</span>
+        </div>
+        <span class="logo-subtitle">AI & ML Engineer</span>
+      </a>
+      
+      <nav id="nav-menu">
+        <ul>
+          <li><a href="#about" class="nav-link">About</a></li>
+          <li><a href="#ai-lab" class="nav-link">AI Lab</a></li>
+          <li><a href="#experience" class="nav-link">Experience</a></li>
+          <li><a href="#projects" class="nav-link">Projects</a></li>
+          <li><a href="#skills" class="nav-link">Skills</a></li>
+          <li><a href="#achievements" class="nav-link">Achievements</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button id="mobile-nav-toggle" aria-label="Toggle Navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="badge-container">
+          <span class="badge badge-glow"><i class="fa-solid fa-microchip"></i> AI/ML Career Path</span>
+          <span class="badge badge-secondary"><i class="fa-solid fa-graduation-cap"></i> GATE 2026 Qualified (CSE)</span>
+        </div>
+        <h1 class="hero-title">
+          Engineering the <span class="gradient-text">Future of Intelligence</span>
+        </h1>
+        <p class="hero-tagline">
+          I build robust machine learning models, extract critical data-driven insights, and develop full-stack data solutions. Currently pursuing double degrees at <strong class="highlight">IIT Madras</strong> and <strong class="highlight">REC Bijnor</strong>.
+        </p>
+        
+        <div class="hero-ctas">
+          <a href="#ai-lab" class="btn btn-primary"><i class="fa-solid fa-play"></i> Initialize Neeraj-Bot</a>
+          <a href="#projects" class="btn btn-outline"><i class="fa-solid fa-code"></i> View Projects</a>
+        </div>
+
+        <div class="hero-socials">
+          <a href="https://github.com/jikumarneeraj" target="_blank" rel="noopener noreferrer" title="GitHub" class="social-icon"><i class="fa-brands fa-github"></i></a>
+          <a href="https://www.linkedin.com/in/neeraj-kumar-data-scientist" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="https://www.kaggle.com/jikumarneeraj" target="_blank" rel="noopener noreferrer" title="Kaggle" class="social-icon"><i class="fa-brands fa-kaggle"></i></a>
+          <a href="https://drive.google.com/file/d/126xa2wpaU5p-5I-ajdPjnt-8orafmMdA/view" target="_blank" rel="noopener noreferrer" title="Download Resume" class="social-icon"><i class="fa-solid fa-file-arrow-down"></i></a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="neural-network-wrapper">
+          <svg class="neural-network-svg" viewBox="0 0 400 400" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <!-- Glowing filters for nodes and lines -->
+              <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="6" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+              <filter id="glow-purple" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="6" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+              <linearGradient id="grad-line" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00f2fe" stop-opacity="0.6" />
+                <stop offset="100%" stop-color="#b180ff" stop-opacity="0.6" />
+              </linearGradient>
+            </defs>
+
+            <!-- Grid background pattern -->
+            <g opacity="0.1">
+              <circle cx="200" cy="200" r="180" fill="none" stroke="rgba(255,255,255,0.2)" stroke-dasharray="5,5" />
+              <circle cx="200" cy="200" r="120" fill="none" stroke="rgba(255,255,255,0.2)" stroke-dasharray="5,5" />
+              <circle cx="200" cy="200" r="60" fill="none" stroke="rgba(255,255,255,0.2)" stroke-dasharray="5,5" />
+              <line x1="200" y1="10" x2="200" y2="390" stroke="rgba(255,255,255,0.2)" stroke-dasharray="5,5" />
+              <line x1="10" y1="200" x2="390" y2="200" stroke="rgba(255,255,255,0.2)" stroke-dasharray="5,5" />
+            </g>
+
+            <!-- Network Connections (Lines) -->
+            <g class="network-links" stroke="url(#grad-line)" stroke-width="1.5">
+              <!-- Central hub connections -->
+              <line x1="200" y1="200" x2="90" y2="110" />
+              <line x1="200" y1="200" x2="310" y2="110" />
+              <line x1="200" y1="200" x2="90" y2="290" />
+              <line x1="200" y1="200" x2="310" y2="290" />
+              <line x1="200" y1="200" x2="200" y2="50" />
+              <line x1="200" y1="200" x2="200" y2="350" />
+              
+              <!-- Outer ring connections -->
+              <line x1="90" y1="110" x2="200" y2="50" />
+              <line x1="310" y1="110" x2="200" y2="50" />
+              <line x1="90" y1="290" x2="200" y2="350" />
+              <line x1="310" y1="290" x2="200" y2="350" />
+              <line x1="90" y1="110" x2="90" y2="290" />
+              <line x1="310" y1="110" x2="310" y2="290" />
+            </g>
+
+            <!-- Glowing paths (Data flows) -->
+            <g stroke-linecap="round">
+              <line x1="200" y1="200" x2="90" y2="110" stroke="#00f2fe" stroke-width="2.5" class="data-pulse-1" filter="url(#glow-cyan)" />
+              <line x1="200" y1="200" x2="310" y2="290" stroke="#b180ff" stroke-width="2.5" class="data-pulse-2" filter="url(#glow-purple)" />
+              <line x1="90" y1="110" x2="310" y2="110" stroke="#00f2fe" stroke-width="1.5" class="data-pulse-3" />
+              <line x1="200" y1="200" x2="200" y2="50" stroke="#ffffff" stroke-width="2.5" class="data-pulse-4" />
+              <line x1="200" y1="200" x2="200" y2="350" stroke="#ffffff" stroke-width="2.5" class="data-pulse-5" />
+              <line x1="200" y1="200" x2="90" y2="290" stroke="#00f2fe" stroke-width="2.5" class="data-pulse-6" filter="url(#glow-cyan)" />
+              <line x1="90" y1="290" x2="310" y2="290" stroke="#b180ff" stroke-width="1.5" class="data-pulse-7" />
+              <line x1="200" y1="200" x2="310" y2="110" stroke="#00f2fe" stroke-width="2.5" class="data-pulse-8" filter="url(#glow-cyan)" />
+            </g>
+
+            <!-- Network Nodes (Circles) -->
+            <g>
+              <!-- Center Node (Brain/Model Core) -->
+              <circle cx="200" cy="200" r="16" fill="#03060f" stroke="#00f2fe" stroke-width="3" filter="url(#glow-cyan)" />
+              <circle cx="200" cy="200" r="6" fill="#00f2fe" />
+
+              <!-- Outer Nodes -->
+              <circle cx="90" cy="110" r="10" fill="#0b0f19" stroke="#b180ff" stroke-width="2" filter="url(#glow-purple)" />
+              <circle cx="310" cy="110" r="10" fill="#0b0f19" stroke="#00f2fe" stroke-width="2" filter="url(#glow-cyan)" />
+              <circle cx="90" cy="290" r="10" fill="#0b0f19" stroke="#00f2fe" stroke-width="2" filter="url(#glow-cyan)" />
+              <circle cx="310" cy="290" r="10" fill="#0b0f19" stroke="#b180ff" stroke-width="2" filter="url(#glow-purple)" />
+              
+              <circle cx="200" cy="50" r="10" fill="#0b0f19" stroke="#ffffff" stroke-width="2" />
+              <circle cx="200" cy="350" r="10" fill="#0b0f19" stroke="#b180ff" stroke-width="2" filter="url(#glow-purple)" />
+            </g>
+          </svg>
+
+          <!-- Floating labels placed relative to SVG nodes -->
+          <div class="tech-label label-center"><span>AI PIPELINE</span></div>
+          <div class="tech-label label-top-center"><span>DSA / Core CS</span></div>
+          <div class="tech-label label-top-left"><span>Deep Learning</span></div>
+          <div class="tech-label label-top-right"><span>LangChain / RAG</span></div>
+          <div class="tech-label label-bottom-left"><span>NLP / Models</span></div>
+          <div class="tech-label label-bottom-right"><span>Data Analytics</span></div>
+          <div class="tech-label label-bottom-center"><span>Machine Learning</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="section-padding">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">About Me</h2>
+        <p class="section-subtitle">Bridging academic excellence with practical intelligence</p>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-card glass">
+          <h3>The Dual-Degree Path</h3>
+          <p>
+            I am pursuing a unique and rigorous academic path, combining data science fundamentals with broad information technology skills:
+          </p>
+          <div class="edu-item-compact">
+            <div class="edu-dot"></div>
+            <div class="edu-compact-content">
+              <h4>Bachelors in Data Science and Applications</h4>
+              <span class="edu-inst">Indian Institute of Technology, Madras (Chennai)</span>
+              <span class="edu-meta">2023 – Sept 2027 | CGPA: 7.65</span>
+            </div>
+          </div>
+          <div class="edu-item-compact">
+            <div class="edu-dot"></div>
+            <div class="edu-compact-content">
+              <h4>Bachelor of Technology in Information Technology</h4>
+              <span class="edu-inst">Rajkiya Engineering College (Bijnor, UP)</span>
+              <span class="edu-meta">2023 – July 2027 | CGPA: 7.84 | Rank Holder (Under Top 10)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-card glass bio-pitch">
+          <h3>Professional Statement</h3>
+          <p>
+            I specialize in developing predictive models, analyzing massive datasets, and engineering data pipelines. My academic background from IIT Madras teaches me cutting-edge statistics, machine learning, and algorithm design, while my engineering curriculum at REC Bijnor builds solid foundations in software engineering and systems.
+          </p>
+          <p>
+            Having qualified the prestigious <strong>GATE 2026 (Computer Science & Engineering)</strong>, I have proven competencies in algorithms, database management, operating systems, and computer networks. I am eager to apply these skills to production-grade ML engineering, NLP research, and analytics roles.
+          </p>
+          <div class="about-tags">
+            <span>#PythonExpert</span>
+            <span>#MachineLearning</span>
+            <span>#DataAnalyst</span>
+            <span>#GATECSE2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Lab Section (Training Simulator) -->
+  <section id="ai-lab" class="section-padding section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Neeraj-Bot Training Lab</h2>
+        <p class="section-subtitle">Simulate training a neural network model of Neeraj and query his credentials</p>
+      </div>
+
+      <div class="lab-grid">
+        <!-- Control Panel -->
+        <div class="lab-card glass control-panel">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-sliders text-accent"></i> Hyperparameters</h3>
+          </div>
+          
+          <div class="control-group">
+            <label for="param-optimizer">Optimizer</label>
+            <select id="param-optimizer" class="input-field">
+              <option value="adamw">AdamW (Recommended)</option>
+              <option value="adam">Adam</option>
+              <option value="sgd">SGD (Stochastic Gradient Descent)</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label for="param-lr">Learning Rate (α): <span id="lr-val">0.001</span></label>
+            <input type="range" id="param-lr" min="0.0001" max="0.01" step="0.0001" value="0.001">
+          </div>
+
+          <div class="control-group">
+            <label for="param-epochs">Target Epochs</label>
+            <input type="number" id="param-epochs" class="input-field" min="5" max="20" value="10">
+          </div>
+
+          <div class="control-group">
+            <label>Loss Function</label>
+            <div class="static-val font-mono">CrossEntropyLoss</div>
+          </div>
+
+          <button id="btn-train" class="btn btn-primary btn-full"><i class="fa-solid fa-gear fa-spin-hover"></i> Start Model Training</button>
+        </div>
+
+        <!-- Metrics Dashboard -->
+        <div class="lab-card glass metrics-dashboard">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-chart-line text-accent"></i> Live Training Analytics</h3>
+            <span class="status-indicator font-mono idle" id="training-status">Status: IDLE</span>
+          </div>
+
+          <div class="metrics-grid">
+            <div class="metric-box">
+              <span class="metric-label">Epoch</span>
+              <span class="metric-value font-mono" id="metric-epoch">0/10</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-label">Loss</span>
+              <span class="metric-value font-mono" id="metric-loss">N/A</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-label">Val Accuracy</span>
+              <span class="metric-value font-mono" id="metric-acc">N/A</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-label">Learning Rate</span>
+              <span class="metric-value font-mono" id="metric-lr">0.0010</span>
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <svg id="training-chart" viewBox="0 0 400 150">
+              <!-- Y-Axis grids -->
+              <line x1="40" y1="20" x2="380" y2="20" stroke="rgba(255,255,255,0.05)" />
+              <line x1="40" y1="70" x2="380" y2="70" stroke="rgba(255,255,255,0.05)" />
+              <line x1="40" y1="120" x2="380" y2="120" stroke="rgba(255,255,255,0.05)" />
+              
+              <!-- Axes -->
+              <line x1="40" y1="10" x2="40" y2="130" stroke="rgba(255,255,255,0.2)" />
+              <line x1="40" y1="130" x2="390" y2="130" stroke="rgba(255,255,255,0.2)" />
+              
+              <!-- Labels -->
+              <text x="35" y="25" fill="#64748b" font-size="10" text-anchor="end">1.0</text>
+              <text x="35" y="75" fill="#64748b" font-size="10" text-anchor="end">0.5</text>
+              <text x="35" y="125" fill="#64748b" font-size="10" text-anchor="end">0.0</text>
+              <text x="210" y="145" fill="#64748b" font-size="9" text-anchor="middle">Epoch Progress</text>
+              
+              <!-- Plot Lines -->
+              <path id="path-loss" d="" fill="none" stroke="#7000ff" stroke-width="2" stroke-dasharray="1000" stroke-dashoffset="1000" />
+              <path id="path-acc" d="" fill="none" stroke="#00f2fe" stroke-width="2" stroke-dasharray="1000" stroke-dashoffset="1000" />
+            </svg>
+            <div class="chart-legend">
+              <span class="legend-item"><span class="legend-color color-loss"></span> Loss (Train)</span>
+              <span class="legend-item"><span class="legend-color color-acc"></span> Accuracy (Val)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Neural Interface (Terminal) -->
+      <div id="neural-interface" class="locked">
+        <div class="interface-overlay">
+          <div class="overlay-content">
+            <i class="fa-solid fa-lock text-accent"></i>
+            <h3>Neural Interface Locked</h3>
+            <p>Initiate and complete the model training sequence above to unlock the predictive neural network console.</p>
+          </div>
+        </div>
+
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="header-buttons">
+              <span class="t-btn close"></span>
+              <span class="t-btn minimize"></span>
+              <span class="t-btn maximize"></span>
+            </div>
+            <span class="terminal-title font-mono"><i class="fa-solid fa-terminal"></i> Neeraj-Bot Core Interface v1.0.3</span>
+          </div>
+          
+          <div class="terminal-body font-mono" id="terminal-screen">
+            <div class="terminal-line">Neeraj-Bot neural network initialized successfully.</div>
+            <div class="terminal-line">Parameters locked. Weights loaded from checkpoint.</div>
+            <div class="terminal-line">Type a command or select a preset prompt below to query Neeraj's AI model.</div>
+            <div class="terminal-line">Type <span class="text-accent">help</span> to view available prompts.</div>
+          </div>
+
+          <div class="terminal-presets">
+            <span class="preset-title">Presets:</span>
+            <button class="preset-btn" data-cmd="/profile">/profile</button>
+            <button class="preset-btn" data-cmd="/skills">/skills</button>
+            <button class="preset-btn" data-cmd="/projects">/projects</button>
+            <button class="preset-btn" data-cmd="/gate">/gate</button>
+            <button class="preset-btn" data-cmd="/why-hire">/why-hire</button>
+            <button class="preset-btn" data-cmd="clear">clear</button>
+          </div>
+
+          <form id="terminal-form" class="terminal-input-container">
+            <span class="prompt-symbol">neeraj_bot@model:~#</span>
+            <input type="text" id="terminal-input" placeholder="Type a command (e.g. /skills)..." autocomplete="off">
+            <button type="submit" class="terminal-submit-btn"><i class="fa-solid fa-paper-plane"></i></button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience Section -->
+  <section id="experience" class="section-padding">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Leadership & Experience</h2>
+        <p class="section-subtitle">Managerial roles held within student organizations</p>
+      </div>
+
+      <div class="timeline">
+        <!-- Class Representative -->
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content glass">
+            <div class="timeline-header">
+              <span class="timeline-date"><i class="fa-solid fa-calendar-days"></i> 2025 - 2027</span>
+              <h3 class="timeline-role">Class Representative (B.Tech 3rd & 4th Year)</h3>
+              <span class="timeline-org">Rajkiya Engineering College, Bijnor</span>
+            </div>
+            <div class="timeline-body">
+              <ul>
+                <li>Selected to represent B.Tech Information Technology students for their 3rd and 4th academic years.</li>
+                <li>Liaised directly with faculty and administration, resolving student body issues and coordinating academic resources.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lenovo Internship -->
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content glass">
+            <div class="timeline-header">
+              <span class="timeline-date"><i class="fa-solid fa-calendar-days"></i> June 2026 - July 2026</span>
+              <h3 class="timeline-role">LeAP Next Gen Intern</h3>
+              <span class="timeline-org">Lenovo <a href="https://drive.google.com/file/d/1aRv7B4REcb2rlPQrmEfeS6hGU22orz3i/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="link-certificate"><i class="fa-solid fa-file-pdf"></i> Verification</a></span>
+            </div>
+            <div class="timeline-body">
+              <ul>
+                <li>Completed the Lenovo LeAP Next Gen Internship program, focusing on computing architectures and technology integration.</li>
+                <li>Collaborated on tech initiatives, analyzing systems, and acquiring hands-on enterprise-level industry exposure.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- IIT Ropar Selection -->
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content glass">
+            <div class="timeline-header">
+              <span class="timeline-date"><i class="fa-solid fa-calendar-days"></i> May 2026</span>
+              <h3 class="timeline-role">Research Intern (Selected)</h3>
+              <span class="timeline-org">Indian Institute of Technology, Ropar <a href="https://drive.google.com/file/d/1wzXQXcFegS0-aV42FsUawXl0j9ISjAQx/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="link-certificate"><i class="fa-solid fa-file-pdf"></i> Offer Letter</a></span>
+            </div>
+            <div class="timeline-body">
+              <ul>
+                <li>Selected for a research internship opportunity at IIT Ropar based on academic performance and engineering skills.</li>
+                <li>Did not complete/proceed with the role due to academic schedules and time constraints.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Career Analytics Selection -->
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content glass">
+            <div class="timeline-header">
+              <span class="timeline-date"><i class="fa-solid fa-calendar-days"></i> March 2026</span>
+              <h3 class="timeline-role">Data Analytics Intern (Selected)</h3>
+              <span class="timeline-org">Career Analytics <a href="https://drive.google.com/file/d/1alVcRYFSEqd7yu0b-bG7J728vzYjcvhd/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="link-certificate"><i class="fa-solid fa-file-pdf"></i> Offer Letter</a></span>
+            </div>
+            <div class="timeline-body">
+              <ul>
+                <li>Selected for a Data Analytics internship position at Career Analytics.</li>
+                <li>Declined the offer due to dual-degree study workload and time limitations.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upper House Council Member IIT Madras -->
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content glass">
+            <div class="timeline-header">
+              <span class="timeline-date"><i class="fa-solid fa-calendar-days"></i> Sep 2023 - Dec 2024</span>
+              <h3 class="timeline-role">Upper House Council Member</h3>
+              <span class="timeline-org">Indian Institute of Technology Madras</span>
+            </div>
+            <div class="timeline-body">
+              <ul>
+                <li>Represented student interests at the central council level, participating in key decision-making processes.</li>
+                <li>Organized online and offline cultural, technical, and academic events catering to students across regions.</li>
+                <li>Coordinated directly with the IIT Madras management and administration team for seamless event approvals, funding, and execution.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Group Leader IIT Madras -->
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content glass">
+            <div class="timeline-header">
+              <span class="timeline-date"><i class="fa-solid fa-calendar-days"></i> Sep 2023 - Nov 2024</span>
+              <h3 class="timeline-role">Group Leader</h3>
+              <span class="timeline-org">Indian Institute of Technology Madras (Lucknow Region) <a href="https://drive.google.com/file/d/11GKlKCRy-hhochezQOMQy8OFEeguRQg4/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="link-certificate"><i class="fa-solid fa-file-pdf"></i> Verification</a></span>
+            </div>
+            <div class="timeline-body">
+              <ul>
+                <li>Led Group 232 (Lucknow Region), orchestrating team meetings, distributing resources, and ensuring smooth project collaboration.</li>
+                <li>Handled group coordination, student issue resolutions, and facilitated offline meetups.</li>
+                <li>Responsible for verifying and managing IITM student funds allocated for organizing and coordinating offline student meetups and community building.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" class="section-padding section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Interactive Project Repository</h2>
+        <p class="section-subtitle">Browse machine learning, NLP, and data engineering projects</p>
+      </div>
+
+      <!-- Project Filter Category Tabs -->
+      <div class="project-filters">
+        <button class="filter-btn active" data-filter="all">All Projects</button>
+        <button class="filter-btn" data-filter="ml-nlp">Machine Learning & NLP</button>
+        <button class="filter-btn" data-filter="data-science">Data Science & Analytics</button>
+        <button class="filter-btn" data-filter="software">Software Engineering</button>
+      </div>
+
+      <!-- Projects Grid -->
+      <div class="projects-grid" id="projects-container">
+        <!-- Dynamically rendered projects -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills" class="section-padding">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Technical Skill Map</h2>
+        <p class="section-subtitle">Quantified programming languages, ML models, and tool proficiencies</p>
+      </div>
+
+      <div class="skills-grid">
+        <!-- ML & AI Card -->
+        <div class="skills-card glass">
+          <div class="skill-category-header">
+            <i class="fa-solid fa-brain"></i>
+            <h3>Machine Learning & NLP</h3>
+          </div>
+          <div class="skills-list">
+            <div class="skill-item">
+              <div class="skill-info">
+                <span>Scikit-Learn</span>
+                <span>Advanced</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 85%;"></div></div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-info">
+                <span>Natural Language Processing (NLP)</span>
+                <span>Intermediate</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 75%;"></div></div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-info">
+                <span>Deep Learning (Neural Networks)</span>
+                <span>Intermediate</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 70%;"></div></div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-info">
+                <span>Model Tuning & Evaluation</span>
+                <span>Advanced</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 80%;"></div></div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-info">
+                <span>LangChain / RAG Systems</span>
+                <span>Intermediate</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 70%;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Science & Analytics Card -->
+        <div class="skills-card glass">
+          <div class="skill-category-header">
+            <i class="fa-solid fa-chart-simple"></i>
+            <h3>Data Science & Analytics</h3>
+          </div>
+          <div class="skills-list">
+            <div class="skill-item">
+              <div class="skill-info">
+                <span>Pandas & NumPy</span>
+                <span>Expert</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 90%;"></div></div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-info">
+                <span>Matplotlib & Seaborn</span>
+                <span>Expert</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 90%;"></div></div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-info">
+                <span>Power BI Dashboard Design</span>
+                <span>Advanced</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 80%;"></div></div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-info">
+                <span>Excel Data Modeling</span>
+                <span>Advanced</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 85%;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Languages & Developer Tools Card -->
+        <div class="skills-card glass">
+          <div class="skill-category-header">
+            <i class="fa-solid fa-laptop-code"></i>
+            <h3>Languages & Core Dev Tools</h3>
+          </div>
+          <div class="skills-list">
+            <div class="skill-item">
+              <div class="skill-info">
+                <span>Python</span>
+                <span>Expert</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 95%;"></div></div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-info">
+                <span>SQL (DBMS / Querying)</span>
+                <span>Advanced</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 85%;"></div></div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-info">
+                <span>C Programming</span>
+                <span>Intermediate</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 70%;"></div></div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-info">
+                <span>Git & GitHub Workflows</span>
+                <span>Advanced</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 80%;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Web & Infrastructure Card -->
+        <div class="skills-card glass">
+          <div class="skill-category-header">
+            <i class="fa-solid fa-server"></i>
+            <h3>Web & Deployment</h3>
+          </div>
+          <div class="skills-list">
+            <div class="skill-item">
+              <div class="skill-info">
+                <span>Flask (REST APIs)</span>
+                <span>Advanced</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 80%;"></div></div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-info">
+                <span>HTML & CSS Layouts</span>
+                <span>Advanced</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 85%;"></div></div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-info">
+                <span>Redis / Celery (Task Queues)</span>
+                <span>Intermediate</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 60%;"></div></div>
+            </div>
+            <div class="skill-item">
+              <div class="skill-info">
+                <span>SQLite (Relational Db)</span>
+                <span>Advanced</span>
+              </div>
+              <div class="skill-bar"><div class="skill-progress" style="width: 75%;"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Soft Skills Row -->
+      <div class="soft-skills-container glass">
+        <h3>Soft Skills</h3>
+        <div class="soft-skills-badges">
+          <span class="soft-badge"><i class="fa-solid fa-people-group"></i> Leadership</span>
+          <span class="soft-badge"><i class="fa-solid fa-magnifying-glass-chart"></i> Critical Thinking</span>
+          <span class="soft-badge"><i class="fa-solid fa-scale-balanced"></i> Decision Making</span>
+          <span class="soft-badge"><i class="fa-solid fa-list-check"></i> Multi-tasking</span>
+          <span class="soft-badge"><i class="fa-solid fa-clock"></i> Time Management</span>
+          <span class="soft-badge"><i class="fa-solid fa-ear-listening"></i> Active Listening</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Achievements Section -->
+  <section id="achievements" class="section-padding section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Certifications & Achievements</h2>
+        <p class="section-subtitle">Recognitions and verified credentials in AI, Data Science, and Programming</p>
+      </div>
+
+      <div class="achievements-container">
+        <!-- Highlights Row -->
+        <div class="achievements-highlights">
+          <a href="https://drive.google.com/file/d/1towJFGkqurTibie2kjY5d314Rw_ELIWb/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="highlight-item glass glow-card" style="text-decoration: none; color: inherit;">
+            <div class="highlight-icon"><i class="fa-solid fa-award"></i></div>
+            <h3>GATE 2026 Qualified</h3>
+            <p>Successfully qualified the Graduate Aptitude Test in Engineering (CSE). <span class="text-accent" style="display: block; font-size: 0.8rem; margin-top: 10px; font-family: var(--font-mono);"><i class="fa-solid fa-file-pdf"></i> View Certificate</span></p>
+          </a>
+          <a href="https://drive.google.com/file/d/1RYhGQJQYVSyNDh2gJMg110a33V1uL_94/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="highlight-item glass glow-card" style="text-decoration: none; color: inherit;">
+            <div class="highlight-icon"><i class="fa-solid fa-trophy"></i></div>
+            <h3>1st Position</h3>
+            <p>Ranked 1st in the Word to Sentence Competition during the Academic Induction Program. <span class="text-accent" style="display: block; font-size: 0.8rem; margin-top: 10px; font-family: var(--font-mono);"><i class="fa-solid fa-file-pdf"></i> View Certificate</span></p>
+          </a>
+          <a href="https://drive.google.com/file/d/1GJfCgaFAB80pLbVW8lH4IBzZnf7rNwUd/view" target="_blank" rel="noopener noreferrer" class="highlight-item glass glow-card" style="text-decoration: none; color: inherit;">
+            <div class="highlight-icon"><i class="fa-solid fa-certificate"></i></div>
+            <h3>Advanced SQL</h3>
+            <p>Verified Advanced SQL certification by HackerRank, demonstrating database mastery. <span class="text-accent" style="display: block; font-size: 0.8rem; margin-top: 10px; font-family: var(--font-mono);"><i class="fa-solid fa-file-pdf"></i> View Certificate</span></p>
+          </a>
+        </div>
+
+        <div class="certifications-grid">
+          <div class="cert-card glass">
+            <h4>Machine Learning & AI</h4>
+            <ul>
+              <li><a href="https://drive.google.com/file/d/1ryV6rhFoc0SblUfMqYYU_hVH76hWxpW6/view" target="_blank" rel="noopener noreferrer" class="cert-link"><i class="fa-solid fa-circle-check text-accent"></i> Machine Learning Using Python — SimpleLearn</a></li>
+              <li><a href="https://drive.google.com/file/d/1-5Zxz-f6i-pdtRR9q3y1gQLNAHky11j6/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="cert-link"><i class="fa-solid fa-circle-check text-accent"></i> Decode Data Science with Machine Learning — PW</a></li>
+              <li><a href="https://drive.google.com/file/d/1LNnKONxOVHFgkceKxHdbCsoqupu5qDNx/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="cert-link"><i class="fa-solid fa-circle-check text-accent"></i> Implementing ML using NumPy — IIT Madras</a></li>
+            </ul>
+          </div>
+          <div class="cert-card glass">
+            <h4>Data Science & Analytics</h4>
+            <ul>
+              <li><a href="https://courses.cognitiveclass.ai/certificates/b0095eebd5e34dc2a8c7f82ebca2c8d5" target="_blank" rel="noopener noreferrer" class="cert-link"><i class="fa-solid fa-circle-check text-accent"></i> Data Analysis with Python — IBM</a></li>
+              <li><a href="https://courses.cognitiveclass.ai/certificates/43de70cbe69d4cbdb8beb8dd8da55ad6" target="_blank" rel="noopener noreferrer" class="cert-link"><i class="fa-solid fa-circle-check text-accent"></i> Data Visualisation with Python — IBM</a></li>
+              <li><a href="https://courses.cognitiveclass.ai/certificates/5a39c4e2f4f64468b0a2c0aad2b1081e" target="_blank" rel="noopener noreferrer" class="cert-link"><i class="fa-solid fa-circle-check text-accent"></i> Python for Data Science — IBM</a></li>
+              <li><a href="https://drive.google.com/file/d/1AdJ3ijOP7SR4GJae2iGt8FIFrEjsv1a5/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="cert-link"><i class="fa-solid fa-circle-check text-accent"></i> Making Interactive Dashboards — IIT Madras</a></li>
+              <li><a href="https://drive.google.com/file/d/1R6LWSRBpxVLLuu3klDulGoduvcN9r61f/view" target="_blank" rel="noopener noreferrer" class="cert-link"><i class="fa-solid fa-circle-check text-accent"></i> Data Visualisation — IIT Madras</a></li>
+            </ul>
+          </div>
+          <div class="cert-card glass">
+            <h4>Programming & Foundation</h4>
+            <ul>
+              <li><a href="https://pwskills.com/learn/certificate/63f3c192-d5e5-40d6-8349-c163762a6e69/" target="_blank" rel="noopener noreferrer" class="cert-link"><i class="fa-solid fa-circle-check text-accent"></i> Python for Beginner — Physics Wallah</a></li>
+              <li><a href="https://cert.wfglobal.org/mod/customcert/verify_certificate.php" target="_blank" rel="noopener noreferrer" class="cert-link"><i class="fa-solid fa-circle-check text-accent"></i> Think Startup- Idea Generation — Wadhwani</a></li>
+              <li><a href="https://cert.wfglobal.org/mod/customcert/verify_certificate.php" target="_blank" rel="noopener noreferrer" class="cert-link"><i class="fa-solid fa-circle-check text-accent"></i> WEN Initial Business Model — Wadhwani</a></li>
+              <li><a href="https://drive.google.com/file/d/1SpvbRvxvbhk3KsCSRgFnVV05s8lAh3IB/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="cert-link"><i class="fa-solid fa-circle-check text-accent"></i> 2nd Position in Atlas — Induction Program</a></li>
+              <li><i class="fa-solid fa-circle-check text-accent"></i> B.Tech Academic Standing: Consistently ranked under Top 10</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section-padding">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Contact Machine Interface</h2>
+        <p class="section-subtitle">Establish a connection for career opportunities, collaborations, or inquiries</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-info glass">
+          <h3>Connection Details</h3>
+          <p>
+            Feel free to reach out directly through email, phone, or check my profiles on professional networks.
+          </p>
+
+          <div class="contact-methods">
+            <div class="method-item">
+              <div class="method-icon"><i class="fa-solid fa-envelope"></i></div>
+              <div class="method-text">
+                <span class="method-label">Email</span>
+                <a href="mailto:suneerajkumar@gmail.com" class="method-val">suneerajkumar@gmail.com</a>
+              </div>
+            </div>
+            <div class="method-item">
+              <div class="method-icon"><i class="fa-solid fa-phone"></i></div>
+              <div class="method-text">
+                <span class="method-label">Mobile</span>
+                <a href="tel:+919140303445" class="method-val">+91 9140303445</a>
+              </div>
+            </div>
+            <div class="method-item">
+              <div class="method-icon"><i class="fa-solid fa-location-dot"></i></div>
+              <div class="method-text">
+                <span class="method-label">Location</span>
+                <span class="method-val">Lucknow UP, India</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-terminal font-mono">
+            <div class="line">$ curl -X GET api.neeraj.io/status</div>
+            <div class="line response">{"status": "available", "role_seeking": "AI/ML Intern / Engineer"}</div>
+          </div>
+        </div>
+
+        <div class="contact-form-container glass">
+          <h3>Send a Secure Message</h3>
+          <form id="contact-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="form-name">Your Name</label>
+                <input type="text" id="form-name" class="input-field" placeholder="Neeraj Kumar" required>
+              </div>
+              <div class="form-group">
+                <label for="form-email">Your Email</label>
+                <input type="email" id="form-email" class="input-field" placeholder="suneerajkumar@gmail.com" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="form-subject">Subject</label>
+              <input type="text" id="form-subject" class="input-field" placeholder="Collaboration / Job Opportunity" required>
+            </div>
+            <div class="form-group">
+              <label for="form-message">Message</label>
+              <textarea id="form-message" class="input-field" rows="5" placeholder="Write your message here..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full"><i class="fa-solid fa-paper-plane"></i> Transmit Message</button>
+            <div id="form-feedback" class="form-feedback font-mono"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-content">
+      <p class="copyright">&copy; 2026 Neeraj Kumar. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="https://github.com/jikumarneeraj" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/neeraj-kumar-data-scientist" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="https://www.kaggle.com/jikumarneeraj" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-kaggle"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Custom JS -->
+  <script type="module" src="script.js"></script>
+</body>
+</html>
