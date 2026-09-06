@@ -118,6 +118,11 @@ document.addEventListener("DOMContentLoaded", () => {
   
   const pathLoss = document.getElementById("path-loss");
   const pathAcc = document.getElementById("path-acc");
+  const areaLoss = document.getElementById("area-loss");
+  const areaAcc = document.getElementById("area-acc");
+  const dotLoss = document.getElementById("dot-loss");
+  const dotAcc = document.getElementById("dot-acc");
+  const chartIdleOverlay = document.getElementById("chart-idle-overlay");
   
   // Neural Console / Terminal elements
   const neuralInterface = document.getElementById("neural-interface");
@@ -272,10 +277,30 @@ document.addEventListener("DOMContentLoaded", () => {
     lrVal.textContent = parseFloat(e.target.value).toFixed(4);
   });
 
+  // Initialize idle state (no pre-baked analytics until user starts training)
+  function initIdleAnalytics() {
+    if (metricLoss) metricLoss.textContent = "--";
+    if (metricAcc) metricAcc.textContent = "--";
+    if (metricEpoch) metricEpoch.textContent = "--/10";
+    if (pathLoss) pathLoss.setAttribute("d", "");
+    if (pathAcc) pathAcc.setAttribute("d", "");
+    if (areaLoss) areaLoss.setAttribute("d", "");
+    if (areaAcc) areaAcc.setAttribute("d", "");
+    if (dotLoss) dotLoss.style.display = "none";
+    if (dotAcc) dotAcc.style.display = "none";
+    if (chartIdleOverlay) chartIdleOverlay.classList.remove("hidden");
+  }
+  initIdleAnalytics();
+
   let isTraining = false;
 
   btnTrain.addEventListener("click", async () => {
     if (isTraining) return;
+    
+    // Hide idle placeholder overlay
+    if (chartIdleOverlay) chartIdleOverlay.classList.add("hidden");
+    pathLoss.style.opacity = "1";
+    pathAcc.style.opacity = "1";
     
     isTraining = true;
     btnTrain.disabled = true;
@@ -304,13 +329,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // Reset charts paths
     pathLoss.setAttribute("d", "");
     pathAcc.setAttribute("d", "");
+    if (areaLoss) areaLoss.setAttribute("d", "");
+    if (areaAcc) areaAcc.setAttribute("d", "");
+    if (dotLoss) dotLoss.style.display = "none";
+    if (dotAcc) dotAcc.style.display = "none";
 
-    // Training progression calculations
-    const lossPoints = [];
-    const accPoints = [];
-    
-    let currentLoss = 2.45; // Start with high loss
-    let currentAcc = 0.32;  // Start with low accuracy (random guessing)
+    // Target final values requested: Accuracy 97.65% (0.9765) and Loss 0.1500
+    const TARGET_FINAL_LOSS = 0.1500;
+    const TARGET_FINAL_ACC = 0.9765;
+    const INITIAL_LOSS = 2.4500;
+    const INITIAL_ACC = 0.3200;
 
     // Chart Dimensions
     // SVG viewBox: 0 0 400 150
@@ -321,31 +349,40 @@ document.addEventListener("DOMContentLoaded", () => {
     const startY = 120; // Bottom (Y=120 corresponds to value 0.0, Y=20 corresponds to value 1.0)
 
     function mapValueToY(val, maxVal = 1.0) {
-      // Linear mapping to chart Y space [20, 120]
-      // val = 0 -> Y = 120
-      // val = maxVal -> Y = 20
       const ratio = Math.min(Math.max(val / maxVal, 0), 1);
       return startY - (ratio * chartHeight);
     }
 
+    // Baseline initial points (Epoch 0 / baseline state)
+    const lossPoints = [{ x: startX, y: mapValueToY(INITIAL_LOSS, 2.5) }];
+    const accPoints = [{ x: startX, y: mapValueToY(INITIAL_ACC, 1.0) }];
+
+    let currentLoss = INITIAL_LOSS;
+    let currentAcc = INITIAL_ACC;
+
     // Run epochs simulation
     for (let epoch = 1; epoch <= targetEpochs; epoch++) {
       // Simulate epoch step duration
-      await new Promise(resolve => setTimeout(resolve, 400));
-      
-      // Calculate learning convergence behavior
-      // Higher learning rates converge faster but can fluctuate
-      const rateFactor = lr * 250; 
-      const noise = (Math.random() - 0.5) * 0.08;
-      
-      // Compute Loss decrease
-      currentLoss = currentLoss - (currentLoss * (0.22 + noise * 0.1) * (1 + rateFactor * 0.05));
-      if (currentLoss < 0.05) currentLoss = 0.05;
+      await new Promise(resolve => setTimeout(resolve, 320));
 
-      // Compute Val Accuracy increase
-      const remainingAcc = 1.0 - currentAcc;
-      currentAcc = currentAcc + (remainingAcc * (0.28 + noise * 0.08) * (1 + rateFactor * 0.03));
-      if (currentAcc > 0.998) currentAcc = 0.998;
+      const progress = epoch / targetEpochs;
+
+      if (epoch === targetEpochs) {
+        // Guaranteed exact match to user specification on convergence
+        currentLoss = TARGET_FINAL_LOSS;
+        currentAcc = TARGET_FINAL_ACC;
+      } else {
+        // Smooth logarithmic / exponential progression toward target with natural training jitter
+        const expFactor = 1 - Math.exp(-3.2 * progress);
+        const noiseLoss = (Math.random() - 0.48) * 0.03 * (1 - progress);
+        const noiseAcc = (Math.random() - 0.52) * 0.015 * (1 - progress);
+
+        currentLoss = INITIAL_LOSS - (INITIAL_LOSS - TARGET_FINAL_LOSS) * expFactor + noiseLoss;
+        currentAcc = INITIAL_ACC + (TARGET_FINAL_ACC - INITIAL_ACC) * expFactor + noiseAcc;
+
+        if (currentLoss < TARGET_FINAL_LOSS) currentLoss = TARGET_FINAL_LOSS + 0.01;
+        if (currentAcc > TARGET_FINAL_ACC) currentAcc = TARGET_FINAL_ACC - 0.005;
+      }
 
       // UI updates
       metricEpoch.textContent = `${epoch}/${targetEpochs}`;
@@ -353,27 +390,46 @@ document.addEventListener("DOMContentLoaded", () => {
       metricAcc.textContent = `${(currentAcc * 100).toFixed(2)}%`;
 
       // Map coordinates
-      const x = startX + ((epoch - 1) / (targetEpochs - 1)) * chartWidth;
-      
-      // Map Loss (max value of 2.5)
+      const x = startX + progress * chartWidth;
       const lossY = mapValueToY(currentLoss, 2.5);
-      // Map Accuracy (max value of 1.0)
       const accY = mapValueToY(currentAcc, 1.0);
 
       lossPoints.push({ x, y: lossY });
       accPoints.push({ x, y: accY });
 
-      // Rebuild paths
-      let dLoss = `M ${lossPoints[0].x} ${lossPoints[0].y}`;
-      let dAcc = `M ${accPoints[0].x} ${accPoints[0].y}`;
+      // Rebuild paths smoothly
+      let dLoss = `M ${lossPoints[0].x.toFixed(1)} ${lossPoints[0].y.toFixed(1)}`;
+      let dAcc = `M ${accPoints[0].x.toFixed(1)} ${accPoints[0].y.toFixed(1)}`;
 
       for (let i = 1; i < lossPoints.length; i++) {
-        dLoss += ` L ${lossPoints[i].x} ${lossPoints[i].y}`;
-        dAcc += ` L ${accPoints[i].x} ${accPoints[i].y}`;
+        dLoss += ` L ${lossPoints[i].x.toFixed(1)} ${lossPoints[i].y.toFixed(1)}`;
+        dAcc += ` L ${accPoints[i].x.toFixed(1)} ${accPoints[i].y.toFixed(1)}`;
       }
 
       pathLoss.setAttribute("d", dLoss);
       pathAcc.setAttribute("d", dAcc);
+
+      // Update area fills
+      if (areaLoss) {
+        const areaLossD = `${dLoss} L ${x.toFixed(1)} ${startY} L ${startX} ${startY} Z`;
+        areaLoss.setAttribute("d", areaLossD);
+      }
+      if (areaAcc) {
+        const areaAccD = `${dAcc} L ${x.toFixed(1)} ${startY} L ${startX} ${startY} Z`;
+        areaAcc.setAttribute("d", areaAccD);
+      }
+
+      // Update indicator dots
+      if (dotLoss) {
+        dotLoss.setAttribute("cx", x.toFixed(1));
+        dotLoss.setAttribute("cy", lossY.toFixed(1));
+        dotLoss.style.display = "block";
+      }
+      if (dotAcc) {
+        dotAcc.setAttribute("cx", x.toFixed(1));
+        dotAcc.setAttribute("cy", accY.toFixed(1));
+        dotAcc.style.display = "block";
+      }
     }
 
     // Training Complete
@@ -384,7 +440,7 @@ document.addEventListener("DOMContentLoaded", () => {
     isTraining = false;
 
     // Unlock neural interface console
-    unlockTerminal(optimizer, targetEpochs, lr, currentAcc, currentLoss);
+    unlockTerminal(optimizer, targetEpochs, lr, TARGET_FINAL_ACC, TARGET_FINAL_LOSS);
   });
 
   // ==========================================

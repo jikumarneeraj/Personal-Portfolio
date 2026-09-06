@@ -67,7 +67,7 @@
         </p>
         
         <div class="hero-ctas">
-          <a href="#ai-lab" class="btn btn-primary"><i class="fa-solid fa-play"></i> Initialize Neeraj-Bot</a>
+          <a href="#ai-lab" class="btn btn-primary"><i class="fa-solid fa-play"></i> Initialize Bot Training</a>
           <a href="#projects" class="btn btn-outline"><i class="fa-solid fa-code"></i> View Projects</a>
         </div>
 
@@ -223,7 +223,7 @@
   <section id="ai-lab" class="section-padding section-alt">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">Neeraj-Bot Training Lab</h2>
+        <h2 class="section-title">Bot Training Lab</h2>
         <p class="section-subtitle">Simulate training a neural network model of Neeraj and query his credentials</p>
       </div>
 
@@ -271,15 +271,15 @@
           <div class="metrics-grid">
             <div class="metric-box">
               <span class="metric-label">Epoch</span>
-              <span class="metric-value font-mono" id="metric-epoch">0/10</span>
+              <span class="metric-value font-mono" id="metric-epoch">--/10</span>
             </div>
             <div class="metric-box">
               <span class="metric-label">Loss</span>
-              <span class="metric-value font-mono" id="metric-loss">N/A</span>
+              <span class="metric-value font-mono" id="metric-loss">--</span>
             </div>
             <div class="metric-box">
               <span class="metric-label">Val Accuracy</span>
-              <span class="metric-value font-mono" id="metric-acc">N/A</span>
+              <span class="metric-value font-mono" id="metric-acc">--</span>
             </div>
             <div class="metric-box">
               <span class="metric-label">Learning Rate</span>
@@ -289,25 +289,48 @@
 
           <div class="chart-container">
             <svg id="training-chart" viewBox="0 0 400 150">
+              <defs>
+                <linearGradient id="grad-acc" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#00f2fe" stop-opacity="0.28" />
+                  <stop offset="100%" stop-color="#00f2fe" stop-opacity="0.0" />
+                </linearGradient>
+                <linearGradient id="grad-loss" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#b180ff" stop-opacity="0.22" />
+                  <stop offset="100%" stop-color="#b180ff" stop-opacity="0.0" />
+                </linearGradient>
+              </defs>
+
               <!-- Y-Axis grids -->
-              <line x1="40" y1="20" x2="380" y2="20" stroke="rgba(255,255,255,0.05)" />
-              <line x1="40" y1="70" x2="380" y2="70" stroke="rgba(255,255,255,0.05)" />
-              <line x1="40" y1="120" x2="380" y2="120" stroke="rgba(255,255,255,0.05)" />
+              <line x1="40" y1="20" x2="380" y2="20" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3,3" />
+              <line x1="40" y1="70" x2="380" y2="70" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3,3" />
+              <line x1="40" y1="120" x2="380" y2="120" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3,3" />
               
               <!-- Axes -->
               <line x1="40" y1="10" x2="40" y2="130" stroke="rgba(255,255,255,0.2)" />
               <line x1="40" y1="130" x2="390" y2="130" stroke="rgba(255,255,255,0.2)" />
               
               <!-- Labels -->
-              <text x="35" y="25" fill="#64748b" font-size="10" text-anchor="end">1.0</text>
-              <text x="35" y="75" fill="#64748b" font-size="10" text-anchor="end">0.5</text>
-              <text x="35" y="125" fill="#64748b" font-size="10" text-anchor="end">0.0</text>
+              <text x="35" y="24" fill="#64748b" font-size="9" text-anchor="end">1.0</text>
+              <text x="35" y="74" fill="#64748b" font-size="9" text-anchor="end">0.5</text>
+              <text x="35" y="124" fill="#64748b" font-size="9" text-anchor="end">0.0</text>
               <text x="210" y="145" fill="#64748b" font-size="9" text-anchor="middle">Epoch Progress</text>
               
+              <!-- Shaded Areas -->
+              <path id="area-loss" d="" fill="url(#grad-loss)" opacity="0.8" />
+              <path id="area-acc" d="" fill="url(#grad-acc)" opacity="0.8" />
+
               <!-- Plot Lines -->
-              <path id="path-loss" d="" fill="none" stroke="#7000ff" stroke-width="2" stroke-dasharray="1000" stroke-dashoffset="1000" />
-              <path id="path-acc" d="" fill="none" stroke="#00f2fe" stroke-width="2" stroke-dasharray="1000" stroke-dashoffset="1000" />
+              <path id="path-loss" d="" fill="none" stroke="#b180ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path id="path-acc" d="" fill="none" stroke="#00f2fe" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+
+              <!-- Endpoint Glowing Indicators -->
+              <circle id="dot-loss" cx="0" cy="0" r="4" fill="#b180ff" stroke="#ffffff" stroke-width="1.5" style="display: none;" />
+              <circle id="dot-acc" cx="0" cy="0" r="4" fill="#00f2fe" stroke="#ffffff" stroke-width="1.5" style="display: none;" />
             </svg>
+            <div id="chart-idle-overlay" class="chart-idle-overlay">
+              <i class="fa-solid fa-play-circle text-accent"></i>
+              <span>Click "Start Model Training" to begin live analytics</span>
+            </div>
             <div class="chart-legend">
               <span class="legend-item"><span class="legend-color color-loss"></span> Loss (Train)</span>
               <span class="legend-item"><span class="legend-color color-acc"></span> Accuracy (Val)</span>

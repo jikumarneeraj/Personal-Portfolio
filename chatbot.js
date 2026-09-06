@@ -75,9 +75,9 @@
       <!-- Floating Toggle Button -->
       <button id="chatbot-launcher-btn" class="chatbot-launcher" aria-label="Open Neeraj's AI Assistant" title="Chat with Neeraj's AI Assistant">
         <div class="launcher-glow"></div>
-        <div class="launcher-icon">
-          <i class="fa-solid fa-sparkles launcher-sparkle"></i>
-          <i class="fa-solid fa-robot launcher-robot"></i>
+        <div class="launcher-avatar-wrap">
+          <img src="/chatbot-avatar.png" alt="Neeraj AI" class="launcher-avatar-img" />
+          <span class="launcher-online-badge"></span>
         </div>
         <span class="launcher-tooltip">Ask Neeraj's AI</span>
       </button>
@@ -88,7 +88,7 @@
         <div class="chatbot-header">
           <div class="header-info">
             <div class="header-avatar">
-              <i class="fa-solid fa-brain"></i>
+              <img src="/chatbot-avatar.png" alt="Neeraj AI Assistant" class="header-avatar-img" />
               <span class="status-pulse-dot"></span>
             </div>
             <div class="header-titles">
@@ -110,10 +110,9 @@
         <div id="chatbot-messages" class="chatbot-messages">
           <!-- Initial Welcome Message -->
           <div class="chat-msg assistant-msg">
-            <div class="msg-avatar"><i class="fa-solid fa-robot"></i></div>
+            <div class="msg-avatar"><img src="/chatbot-avatar.png" alt="AI" class="msg-avatar-img" /></div>
             <div class="msg-content">
               <p>Hello! I am <strong>Neeraj's AI Assistant</strong>, representing Neeraj Kumar's AI/ML engineering portfolio.</p>
-              <p>Feel free to ask me about his technical skills, machine learning projects, GATE 2026 qualification, or request his resume and contact him directly!</p>
               <div class="msg-quick-actions" id="initial-quick-actions">
                 <button class="quick-chip" data-query="Who is Neeraj?">About Neeraj</button>
                 <button class="quick-chip" data-query="What projects has Neeraj built?">Projects</button>
@@ -197,7 +196,7 @@
       msgWrapper.className = `chat-msg ${role === "user" ? "user-msg" : "assistant-msg"}`;
 
       if (role === "assistant") {
-        let contentHtml = `<div class="msg-avatar"><i class="fa-solid fa-robot"></i></div><div class="msg-content">`;
+        let contentHtml = `<div class="msg-avatar"><img src="/chatbot-avatar.png" alt="AI" class="msg-avatar-img" /></div><div class="msg-content">`;
         contentHtml += `<div class="msg-body">${formatAssistantMessage(text)}</div>`;
 
         // If structured action link exists
@@ -331,7 +330,7 @@
       resetThreadId();
       messagesArea.innerHTML = `
         <div class="chat-msg assistant-msg">
-          <div class="msg-avatar"><i class="fa-solid fa-robot"></i></div>
+          <div class="msg-avatar"><img src="/chatbot-avatar.png" alt="AI" class="msg-avatar-img" /></div>
           <div class="msg-content">
             <p>Conversation reset. How can I help you regarding Neeraj Kumar's portfolio?</p>
             <div class="msg-quick-actions">
