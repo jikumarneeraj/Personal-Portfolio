@@ -35,3 +35,14 @@ yarn-error.log*
 # Vite / Bundler cache
 .vite/
 .cache/
+
+# Python & Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
