@@ -41,11 +41,22 @@ def understand_query_node(state: AgentState) -> Dict[str, Any]:
     q_lower = query.lower()
 
     # Direct contact intent triggers
-    if any(phrase in q_lower for phrase in [
-        "contact", "send message", "send a message", "reach out", "hire", "email neeraj",
-        "connect with neeraj", "get in touch", "message neeraj"
-    ]):
+    contact_keywords = [
+        "contact", "send message", "send a message", "send msg", "send a msg", "send msg to neeraj",
+        "reach out", "hire", "email neeraj", "connect with neeraj", "get in touch",
+        "message neeraj", "msg to neeraj", "message to neeraj", "msg neeraj",
+        "talk to neeraj", "speak to neeraj", "meet neeraj", "meeting with neeraj",
+        "meet him", "message him", "msg him", "email him", "contact him",
+        "send email", "send an email", "drop a message", "drop a msg", "send a mail",
+        "send him a message", "send him a msg", "write to neeraj"
+    ]
+    if any(phrase in q_lower for phrase in contact_keywords):
         return {"intent": "contact"}
+
+    # Also detect if email address or send intent is in query
+    if EMAIL_REGEX.search(query) or "@" in query:
+        if any(w in q_lower for w in ["send", "msg", "message", "neeraj", "meet", "reach", "email", "name", "hello", "hi", "want to", "podcast"]):
+            return {"intent": "contact"}
 
     # Resume intent triggers
     if any(phrase in q_lower for phrase in [
@@ -181,9 +192,77 @@ def gemini_answer_node(state: AgentState) -> Dict[str, Any]:
             "response_type": "text"
         }
 
+def extract_contact_info(query: str, current_name=None, current_email=None, current_subject=None, current_message=None):
+    name = current_name
+    email = current_email
+    subject = current_subject
+    message = current_message
+
+    # 1. Email extraction (regex)
+    email_match = re.search(r"[\w\.-]+@[\w\.-]+\.[a-zA-Z]{2,}", query)
+    if email_match and not email:
+        email = email_match.group(0).lower()
+
+    # 2. Name extraction
+    if not name:
+        name_match = re.search(
+            r"(?:my name is|i am|i'm|name is|name[:=]|this is)\s+([a-zA-Z0-9_\s]{2,30}?)(?=\s+(?:and|with|email|regarding|subject|my|\.|$|,))",
+            query,
+            re.IGNORECASE
+        )
+        if name_match:
+            cand = name_match.group(1).strip()
+            if cand.lower() not in ["neeraj", "interested", "writing", "sending", "looking", "a", "an"]:
+                name = cand
+
+    # 3. Subject extraction
+    if not subject:
+        subj_match = re.search(
+            r"(?:subject is|subject[:=]|regarding|related to|topic is)\s+([a-zA-Z0-9_\s]{2,60}?)(?=\s+(?:and|with|message|\.|$|,))",
+            query,
+            re.IGNORECASE
+        )
+        if subj_match:
+            extracted_sub = subj_match.group(1).strip()
+            if extracted_sub:
+                if "related to" in query.lower() or "regarding" in query.lower():
+                    subject = f"Discussion related to {extracted_sub}"
+                else:
+                    subject = extracted_sub.capitalize()
+
+    # 4. Message extraction
+    if not message:
+        msg_match = re.search(
+            r"(?:message is|message[:=]|i want to|i would like to|looking to)\s+([^.]+)",
+            query,
+            re.IGNORECASE
+        )
+        if msg_match:
+            extracted_msg = msg_match.group(0).strip()
+            cleaned_msg = re.sub(r"^(message is|message[:=])\s*", "", extracted_msg, flags=re.IGNORECASE).strip()
+            if cleaned_msg:
+                message = cleaned_msg[0].upper() + cleaned_msg[1:]
+
+    # Fallback subject if message is present but subject is still empty
+    if message and not subject:
+        m_lower = message.lower()
+        if "podcast" in m_lower:
+            subject = "Podcast Discussion / Collaboration"
+        elif "intern" in m_lower:
+            subject = "Internship Inquiry"
+        elif "job" in m_lower or "hire" in m_lower or "position" in m_lower:
+            subject = "Career / Hiring Inquiry"
+        elif "meet" in m_lower or "call" in m_lower:
+            subject = "Meeting Inquiry"
+        else:
+            subject = "Portfolio Inquiry"
+
+    return name, email, subject, message
+
 def contact_agent_node(state: AgentState) -> Dict[str, Any]:
     """
     Stateful multi-turn contact collector with validation and explicit confirmation.
+    Intelligently extracts whatever fields the user has already provided in natural language.
     """
     query = (state.get("query") or "").strip()
     q_lower = query.lower()
@@ -207,118 +286,13 @@ def contact_agent_node(state: AgentState) -> Dict[str, Any]:
             "quick_actions": ["About Neeraj", "Projects", "Skills", "Resume"]
         }
 
-    # If first time entering contact workflow
-    if step == "idle":
-        # Check if user provided all or some information directly in the first prompt
-        # e.g., "My name is John, email john@example.com, subject Job, message hello"
-        step = "asking_name"
-        return {
-            "response": "Sure! I can help you send a message directly to Neeraj.\nWhat is your name?",
-            "response_type": "contact_prompt",
-            "contact_step": "asking_name"
-        }
-
-    if step == "asking_name":
-        # Extract name from input
-        clean_name = query
-        # Remove common preamble like "My name is", "I am", "I'm"
-        clean_name = re.sub(r"^(my name is|i am|i'm|this is)\s+", "", clean_name, flags=re.IGNORECASE).strip()
-        if not clean_name:
-            return {
-                "response": "Please provide a valid name so Neeraj knows who is reaching out.",
-                "response_type": "contact_prompt",
-                "contact_step": "asking_name"
-            }
-        name = clean_name
-        step = "asking_email"
-        return {
-            "response": f"Thanks {name}! What is your email address?",
-            "response_type": "contact_prompt",
-            "contact_step": "asking_email",
-            "name": name
-        }
-
-    if step == "asking_email":
-        # Look for email pattern in query
-        email_match = re.search(r"[\w\.-]+@[\w\.-]+\.\w+", query)
-        if not email_match:
-            return {
-                "response": "Please enter a valid email address (e.g., name@example.com) so Neeraj can reply to you.",
-                "response_type": "contact_prompt",
-                "contact_step": "asking_email",
-                "name": name
-            }
-        email = email_match.group(0).lower()
-        step = "asking_subject"
-        return {
-            "response": "Got it. What is the subject or topic of your message?",
-            "response_type": "contact_prompt",
-            "contact_step": "asking_subject",
-            "name": name,
-            "email": email
-        }
-
-    if step == "asking_subject":
-        clean_subject = query
-        clean_subject = re.sub(r"^(subject is|subject:|topic is|regarding)\s+", "", clean_subject, flags=re.IGNORECASE).strip()
-        if not clean_subject:
-            return {
-                "response": "Please provide a subject for your message.",
-                "response_type": "contact_prompt",
-                "contact_step": "asking_subject",
-                "name": name,
-                "email": email
-            }
-        subject = clean_subject
-        step = "asking_message"
-        return {
-            "response": "Please enter the message you would like to send:",
-            "response_type": "contact_prompt",
-            "contact_step": "asking_message",
-            "name": name,
-            "email": email,
-            "subject": subject
-        }
-
-    if step == "asking_message":
-        if not query:
-            return {
-                "response": "Please write your message for Neeraj:",
-                "response_type": "contact_prompt",
-                "contact_step": "asking_message",
-                "name": name,
-                "email": email,
-                "subject": subject
-            }
-        message = query
-        step = "asking_confirmation"
-        
-        confirmation_prompt = (
-            f"Please confirm the following details before sending:\n\n"
-            f"• **Name**: {name}\n"
-            f"• **Email**: {email}\n"
-            f"• **Subject**: {subject}\n"
-            f"• **Message**: {message}\n\n"
-            f"Should I send this message to Neeraj now? (Reply **Yes** to send, or **No** / **Cancel**)"
-        )
-        return {
-            "response": confirmation_prompt,
-            "response_type": "contact_prompt",
-            "contact_step": "asking_confirmation",
-            "name": name,
-            "email": email,
-            "subject": subject,
-            "message": message,
-            "quick_actions": ["Yes, send it", "Cancel"]
-        }
-
+    # If currently waiting for user confirmation
     if step == "asking_confirmation":
         if any(w in q_lower for w in ["yes", "send", "confirm", "proceed", "sure", "ok", "yep", "yeah"]):
-            # Deliver message via tools
             is_success = submit_contact(name=name, email=email, subject=subject, message=message)
             if is_success:
                 return {
-                    "response": f"Your message has been sent successfully to Neeraj. Thanks for reaching out!",
+                    "response": "Your message has been sent successfully to Neeraj. Thanks for reaching out!",
                     "response_type": "contact_success",
                     "contact_step": "submitted",
                     "contact_submission_status": "success",
@@ -362,6 +336,98 @@ def contact_agent_node(state: AgentState) -> Dict[str, Any]:
                 "message": message,
                 "quick_actions": ["Yes, send it", "Cancel"]
             }
+
+    # Extract any fields provided in the query
+    name, email, subject, message = extract_contact_info(query, name, email, subject, message)
+
+    # Specific step overrides when user directly replies to a single-step question:
+    if step == "asking_name" and not name:
+        clean_name = re.sub(r"^(my name is|i am|i'm|this is)\s+", "", query, flags=re.IGNORECASE).strip()
+        if clean_name:
+            name = clean_name
+    elif step == "asking_email" and not email:
+        email_match = re.search(r"[\w\.-]+@[\w\.-]+\.\w+", query)
+        if email_match:
+            email = email_match.group(0).lower()
+        else:
+            return {
+                "response": "Please enter a valid email address (e.g., name@example.com) so Neeraj can reply to you.",
+                "response_type": "contact_prompt",
+                "contact_step": "asking_email",
+                "name": name
+            }
+    elif step == "asking_subject" and not subject:
+        clean_sub = re.sub(r"^(subject is|subject:|topic is|regarding)\s+", "", query, flags=re.IGNORECASE).strip()
+        if clean_sub:
+            subject = clean_sub
+    elif step == "asking_message" and not message:
+        if query:
+            message = query
+
+    # Now evaluate what is missing and ask only for missing information:
+    if not name:
+        return {
+            "response": "Sure! I can help you send a message directly to Neeraj.\nWhat is your name?",
+            "response_type": "contact_prompt",
+            "contact_step": "asking_name",
+            "name": name,
+            "email": email,
+            "subject": subject,
+            "message": message
+        }
+
+    if not email:
+        return {
+            "response": f"Thanks {name}! What is your email address?",
+            "response_type": "contact_prompt",
+            "contact_step": "asking_email",
+            "name": name,
+            "email": email,
+            "subject": subject,
+            "message": message
+        }
+
+    if not subject:
+        return {
+            "response": f"Got it. What is the subject or topic of your message for Neeraj?",
+            "response_type": "contact_prompt",
+            "contact_step": "asking_subject",
+            "name": name,
+            "email": email,
+            "subject": subject,
+            "message": message
+        }
+
+    if not message:
+        return {
+            "response": "Please enter the message you would like to send:",
+            "response_type": "contact_prompt",
+            "contact_step": "asking_message",
+            "name": name,
+            "email": email,
+            "subject": subject,
+            "message": message
+        }
+
+    # All fields (name, email, subject, message) are now collected!
+    confirmation_prompt = (
+        f"Please confirm the following details before sending:\n\n"
+        f"- **Name**: {name}\n"
+        f"- **Email**: {email}\n"
+        f"- **Subject**: {subject}\n"
+        f"- **Message**: {message}\n\n"
+        f"Should I send this message to Neeraj now? (Reply **Yes** to send, or **No** / **Cancel**)"
+    )
+    return {
+        "response": confirmation_prompt,
+        "response_type": "contact_prompt",
+        "contact_step": "asking_confirmation",
+        "name": name,
+        "email": email,
+        "subject": subject,
+        "message": message,
+        "quick_actions": ["Yes, send it", "Cancel"]
+    }
 
     return {
         "response": "How can I help you with Neeraj's portfolio?",
