@@ -608,27 +608,249 @@ Competencies Verified: Algorithm Design, Data Structures, DBMS, Operating System
   });
 
   // ==========================================
-  // CONTACT FORM INTERACTIVE RESPONSE
+  // CONTACT US - PROFESSIONAL GOOGLE FORMS INTEGRATION
   // ==========================================
 
+  // Google Apps Script Web App endpoint (direct connection to Google Sheet + instant Gmail alerts)
+  const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbysOd5d3iq8afAH3GzBzTy9QL_jF4z7H-bwr2X7mz1qXzqbhKsw7NiEgNIFXCCw6o7_Vg/exec";
+
+  // Google Form Action endpoint & field mapping (secondary background sync)
+  const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe8JjxOjzQocMJx-vehcyqiNd_v0Aou4s19aWN9kgkctbt0Mw/formResponse";
+  const FORM_ENTRIES = {
+    name: "entry.2005620554",
+    email: "entry.1045781291",
+    subject: "entry.1158223365",
+    message: "entry.839337160"
+  };
+
+  const nameInput = document.getElementById("form-name");
+  const emailInput = document.getElementById("form-email");
+  const subjectInput = document.getElementById("form-subject");
+  const messageInput = document.getElementById("form-message");
+
+  const nameError = document.getElementById("name-error");
+  const emailError = document.getElementById("email-error");
+  const subjectError = document.getElementById("subject-error");
+  const messageError = document.getElementById("message-error");
+
+  const submitBtn = document.getElementById("form-submit-btn");
+  const hiddenIframe = document.getElementById("hidden-google-form-iframe");
+
+  let isSubmitting = false;
+  let lastSubmittedName = "";
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function clearFieldError(input, errorEl) {
+    if (input) input.classList.remove("is-invalid");
+    if (errorEl) {
+      errorEl.textContent = "";
+      errorEl.classList.remove("visible");
+    }
+  }
+
+  function setFieldError(input, errorEl, message) {
+    if (input) input.classList.add("is-invalid");
+    if (errorEl) {
+      errorEl.textContent = message;
+      errorEl.classList.add("visible");
+    }
+  }
+
+  // Clear errors dynamically on input
+  [
+    { input: nameInput, error: nameError },
+    { input: emailInput, error: emailError },
+    { input: subjectInput, error: subjectError },
+    { input: messageInput, error: messageError }
+  ].forEach(({ input, error }) => {
+    if (!input) return;
+    input.addEventListener("input", () => {
+      clearFieldError(input, error);
+      if (formFeedback) {
+        formFeedback.textContent = "";
+        formFeedback.className = "form-feedback font-mono";
+      }
+    });
+  });
+
+  function validateContactForm() {
+    let isValid = true;
+
+    // Validate Name
+    const nameVal = nameInput ? nameInput.value.trim() : "";
+    if (!nameVal) {
+      setFieldError(nameInput, nameError, "Please enter your name.");
+      isValid = false;
+    } else {
+      clearFieldError(nameInput, nameError);
+    }
+
+    // Validate Email
+    const emailVal = emailInput ? emailInput.value.trim() : "";
+    if (!emailVal) {
+      setFieldError(emailInput, emailError, "Please enter your email.");
+      isValid = false;
+    } else if (!emailRegex.test(emailVal)) {
+      setFieldError(emailInput, emailError, "Please enter a valid email address.");
+      isValid = false;
+    } else {
+      clearFieldError(emailInput, emailError);
+    }
+
+    // Validate Subject
+    const subjectVal = subjectInput ? subjectInput.value.trim() : "";
+    if (!subjectVal) {
+      setFieldError(subjectInput, subjectError, "Please enter a subject.");
+      isValid = false;
+    } else {
+      clearFieldError(subjectInput, subjectError);
+    }
+
+    // Validate Message
+    const messageVal = messageInput ? messageInput.value.trim() : "";
+    if (!messageVal) {
+      setFieldError(messageInput, messageError, "Please write your message.");
+      isValid = false;
+    } else {
+      clearFieldError(messageInput, messageError);
+    }
+
+    return isValid;
+  }
+
+  function handleSubmissionSuccess(name) {
+    if (!isSubmitting) return;
+    isSubmitting = false;
+
+    const displayName = (name || lastSubmittedName || (nameInput ? nameInput.value.trim() : "")).trim();
+    const personalizedName = displayName ? `, ${displayName}` : "";
+
+    if (formFeedback) {
+      formFeedback.className = "form-feedback success font-mono";
+      formFeedback.textContent = `Thank you for contacting me${personalizedName}! I'll get back to you soon.`;
+    }
+
+    if (contactForm) {
+      contactForm.reset();
+    }
+
+    clearFieldError(nameInput, nameError);
+    clearFieldError(emailInput, emailError);
+    clearFieldError(subjectInput, subjectError);
+    clearFieldError(messageInput, messageError);
+
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+    }
+  }
+
+  function handleSubmissionError(error) {
+    console.error("Submission failed:", error);
+    isSubmitting = false;
+
+    if (formFeedback) {
+      formFeedback.className = "form-feedback error font-mono";
+      formFeedback.textContent = "An error occurred while sending. Please check your connection and try again.";
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+    }
+  }
+
   if (contactForm) {
+    // Hidden iframe load handler (signals that Google Forms processed the POST request)
+    if (hiddenIframe) {
+      hiddenIframe.addEventListener("load", () => {
+        if (isSubmitting) {
+          handleSubmissionSuccess(lastSubmittedName);
+        }
+      });
+    }
+
     contactForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      
-      const name = document.getElementById("form-name").value;
-      const email = document.getElementById("form-email").value;
-      const subject = document.getElementById("form-subject").value;
-      const message = document.getElementById("form-message").value;
+      // 1. Client-side validation
+      if (!validateContactForm()) {
+        e.preventDefault();
+        if (formFeedback) {
+          formFeedback.className = "form-feedback error font-mono";
+          formFeedback.textContent = "Please fill in all required fields correctly.";
+        }
+        return;
+      }
 
-      formFeedback.className = "form-feedback font-mono";
-      formFeedback.textContent = "Transmitting message packet...";
+      // 2. Prevent duplicate submission while in progress
+      if (isSubmitting) {
+        e.preventDefault();
+        return;
+      }
 
-      // Simulate network request
+      // Trim fields before sending
+      if (nameInput) nameInput.value = nameInput.value.trim();
+      if (emailInput) emailInput.value = emailInput.value.trim();
+      if (subjectInput) subjectInput.value = subjectInput.value.trim();
+      if (messageInput) messageInput.value = messageInput.value.trim();
+
+      lastSubmittedName = nameInput ? nameInput.value : "";
+      isSubmitting = true;
+
+      // 3. UI Loading state
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+      }
+
+      if (formFeedback) {
+        formFeedback.className = "form-feedback font-mono";
+        formFeedback.textContent = "Sending your message...";
+      }
+
+      // 4. Primary Delivery: Send to Google Apps Script Web App (direct Sheet entry + instant Gmail alert)
+      try {
+        const scriptParams = new URLSearchParams();
+        scriptParams.append("name", nameInput.value);
+        scriptParams.append("email", emailInput.value);
+        scriptParams.append("subject", subjectInput.value);
+        scriptParams.append("message", messageInput.value);
+
+        fetch(GOOGLE_APPS_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: scriptParams.toString()
+        }).catch((err) => {
+          console.error("Apps script delivery note:", err);
+        });
+      } catch (scriptErr) {}
+
+      // Secondary Delivery: In parallel, dispatch to Google Form endpoint
+      try {
+        const formData = new FormData();
+        formData.append(FORM_ENTRIES.name, nameInput.value);
+        formData.append(FORM_ENTRIES.email, emailInput.value);
+        formData.append(FORM_ENTRIES.subject, subjectInput.value);
+        formData.append(FORM_ENTRIES.message, messageInput.value);
+
+        fetch(GOOGLE_FORM_ACTION_URL, {
+          method: "POST",
+          mode: "no-cors",
+          body: formData
+        }).catch(() => {
+          // If fetch is restricted by browser policy, the hidden iframe handles the delivery
+        });
+      } catch (err) {}
+
+      // 5. Completion safety timer in case cross-origin iframe load events are suppressed
       setTimeout(() => {
-        formFeedback.className = "form-feedback success font-mono";
-        formFeedback.textContent = `Transmission Successful! Thank you, ${name}. Neeraj-Bot will respond shortly.`;
-        contactForm.reset();
-      }, 1500);
+        if (isSubmitting) {
+          handleSubmissionSuccess(lastSubmittedName);
+        }
+      }, 1600);
     });
   }
 });

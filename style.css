@@ -1708,6 +1708,29 @@ textarea.input-field {
   color: #ef4444;
 }
 
+.required-star {
+  color: var(--accent-primary);
+  margin-left: 3px;
+  font-weight: 600;
+}
+
+.input-field.is-invalid {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.2) !important;
+}
+
+.field-error {
+  display: none;
+  font-size: 0.75rem;
+  color: #ef4444;
+  margin-top: 6px;
+  font-family: var(--font-mono);
+}
+
+.field-error.visible {
+  display: block;
+}
+
 /* 16. Footer styling */
 footer {
   background: #020409;
