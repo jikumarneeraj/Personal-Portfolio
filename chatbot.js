@@ -4,7 +4,7 @@
  */
 
 (function () {
-  // Backend API URL: Reads from Vite env, global override, or defaults to relative path in prod / localhost in dev
+  // Backend API URL: Reads from window global, Vite env, or defaults to production backend URL
   function resolveApiBaseUrl() {
     if (typeof window !== "undefined" && window.NEERAJ_AI_API_URL) {
       return window.NEERAJ_AI_API_URL.replace(/\/+$/, "");
@@ -16,8 +16,8 @@
     if (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) {
       return "http://localhost:8000";
     }
-    // In production, default to same origin (e.g., if hosted together)
-    return "";
+    // Production Render backend URL
+    return "https://backend-portfolio-b3qx.onrender.com";
   }
 
   const API_BASE_URL = resolveApiBaseUrl();
