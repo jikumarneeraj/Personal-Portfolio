@@ -4,19 +4,16 @@
  */
 
 (function () {
-  // Backend API URL: Reads from window global, Vite env, or defaults to production backend URL
+  // Backend API URL: Connects to backend-portfolio-b3qx.onrender.com in production, or localhost in development
   function resolveApiBaseUrl() {
     if (typeof window !== "undefined" && window.NEERAJ_AI_API_URL) {
       return window.NEERAJ_AI_API_URL.replace(/\/+$/, "");
     }
-    if (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.VITE_CHATBOT_API_URL) {
-      return import.meta.env.VITE_CHATBOT_API_URL.replace(/\/+$/, "");
-    }
-    // If running on localhost / dev port (3000, 5173), point to local FastAPI port 8000
+    // If running on localhost / local dev port, use local FastAPI port 8000
     if (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) {
       return "http://localhost:8000";
     }
-    // Production Render backend URL
+    // Production Render backend service
     return "https://backend-portfolio-b3qx.onrender.com";
   }
 
