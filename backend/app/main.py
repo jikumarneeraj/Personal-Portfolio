@@ -1,9 +1,12 @@
 import logging
 import uuid
+import os
+from pathlib import Path
 from typing import Optional, List
 from fastapi import FastAPI, HTTPException, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
@@ -112,6 +115,32 @@ async def chat_endpoint(request: Request, body: ChatRequest):
             type="text",
             quick_actions=["About Neeraj", "Projects", "Skills", "Resume"]
         )
+
+# Static file serving: If dist directory exists (single web service deployment), serve portfolio
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+DIST_DIR = BASE_DIR / "dist"
+if not DIST_DIR.exists():
+    # If running from backend directory
+    DIST_DIR = Path.cwd().parent / "dist"
+if not DIST_DIR.exists():
+    DIST_DIR = Path.cwd() / "dist"
+
+if DIST_DIR.exists() and (DIST_DIR / "index.html").exists():
+    logger.info(f"Mounting static frontend assets from {DIST_DIR}")
+    # Mount assets subfolder
+    assets_dir = DIST_DIR / "assets"
+    if assets_dir.exists():
+        app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
+
+    @app.get("/{full_path:path}")
+    async def serve_frontend(full_path: str):
+        # Allow /health, /docs, /chat, /openapi.json to bypass
+        if full_path.startswith(("health", "docs", "chat", "openapi.json", "redoc")):
+            raise HTTPException(status_code=404, detail="Not found")
+        file_path = DIST_DIR / full_path
+        if file_path.is_file():
+            return FileResponse(file_path)
+        return FileResponse(DIST_DIR / "index.html")
 
 if __name__ == "__main__":
     import uvicorn

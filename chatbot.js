@@ -4,11 +4,23 @@
  */
 
 (function () {
-  // Backend API URL: Reads from Vite env, global override, or defaults to localhost
-  const API_BASE_URL = 
-    (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.VITE_CHATBOT_API_URL) ||
-    window.NEERAJ_AI_API_URL ||
-    "http://localhost:8000";
+  // Backend API URL: Reads from Vite env, global override, or defaults to relative path in prod / localhost in dev
+  function resolveApiBaseUrl() {
+    if (typeof window !== "undefined" && window.NEERAJ_AI_API_URL) {
+      return window.NEERAJ_AI_API_URL.replace(/\/+$/, "");
+    }
+    if (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.VITE_CHATBOT_API_URL) {
+      return import.meta.env.VITE_CHATBOT_API_URL.replace(/\/+$/, "");
+    }
+    // If running on localhost / dev port (3000, 5173), point to local FastAPI port 8000
+    if (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) {
+      return "http://localhost:8000";
+    }
+    // In production, default to same origin (e.g., if hosted together)
+    return "";
+  }
+
+  const API_BASE_URL = resolveApiBaseUrl();
 
   const STORAGE_KEY = "neeraj_ai_thread_id";
 
