@@ -16,16 +16,15 @@ logger = logging.getLogger("neeraj_portfolio_assistant.nodes")
 
 EMAIL_REGEX = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
-def get_llm():
+def get_llm(model_override: Optional[str] = None):
     """Initializes and returns the ChatGoogleGenerativeAI instance."""
     api_key = settings.GEMINI_API_KEY or os.environ.get("GEMINI_API_KEY", "")
     if not api_key:
         return None
-    model_name = settings.GEMINI_MODEL or os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+    model_name = model_override or settings.GEMINI_MODEL or os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
     return ChatGoogleGenerativeAI(
         model=model_name,
         google_api_key=api_key,
-        temperature=0.2,
         max_retries=2
     )
 
@@ -42,7 +41,8 @@ def understand_query_node(state: AgentState) -> Dict[str, Any]:
 
     # Direct contact intent triggers
     contact_keywords = [
-        "contact", "send message", "send a message", "send msg", "send a msg", "send msg to neeraj",
+        "contact", "connect", "connect neeraj to me", "connect to neeraj", "can you connect",
+        "can you connect neeraj", "send message", "send a message", "send msg", "send a msg", "send msg to neeraj",
         "reach out", "hire", "email neeraj", "connect with neeraj", "get in touch",
         "message neeraj", "msg to neeraj", "message to neeraj", "msg neeraj",
         "talk to neeraj", "speak to neeraj", "meet neeraj", "meeting with neeraj",
@@ -163,7 +163,16 @@ def gemini_answer_node(state: AgentState) -> Dict[str, Any]:
         # Add current query
         prompt_messages.append(HumanMessage(content=query))
 
-        ai_response = llm.invoke(prompt_messages)
+        try:
+            ai_response = llm.invoke(prompt_messages)
+        except Exception as primary_err:
+            logger.warning(f"Primary model generation failed: {primary_err}. Attempting fallback to gemini-2.5-flash...")
+            fallback_llm = get_llm(model_override="gemini-2.5-flash")
+            if fallback_llm:
+                ai_response = fallback_llm.invoke(prompt_messages)
+            else:
+                raise primary_err
+
         content_val = ai_response.content if hasattr(ai_response, "content") else ai_response
         if isinstance(content_val, str):
             response_text = content_val
@@ -366,8 +375,9 @@ def contact_agent_node(state: AgentState) -> Dict[str, Any]:
 
     # Now evaluate what is missing and ask only for missing information:
     if not name:
+        intro = "Yes, I can! I'd be happy to help you connect with Neeraj." if any(p in q_lower for p in ["connect", "can you", "could you"]) else "Sure! I can help you send a message directly to Neeraj."
         return {
-            "response": "Sure! I can help you send a message directly to Neeraj.\nWhat is your name?",
+            "response": f"{intro}\nWhat is your name?",
             "response_type": "contact_prompt",
             "contact_step": "asking_name",
             "name": name,
