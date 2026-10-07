@@ -191,7 +191,14 @@
       }
     }
 
-    launcherBtn.addEventListener("click", () => toggleChat());
+    // Wake up backend immediately in background if sleeping on Render free tier
+    fetch(`${API_BASE_URL}/health`, { method: "GET" }).catch(() => {});
+
+    launcherBtn.addEventListener("click", () => {
+      toggleChat();
+      // Ensure backend is awake
+      fetch(`${API_BASE_URL}/health`, { method: "GET" }).catch(() => {});
+    });
     closeBtn.addEventListener("click", () => toggleChat(false));
 
     // Auto-scroll to bottom of messages
@@ -263,47 +270,68 @@
 
       const threadId = getOrCreateThreadId();
 
-      try {
-        const response = await fetch(`${API_BASE_URL}/chat`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            message: query,
-            thread_id: threadId
-          })
-        });
+      let attempts = 0;
+      const maxAttempts = 2;
+      let lastError = null;
 
-        if (!response.ok) {
-          throw new Error(`Server returned status: ${response.status}`);
-        }
+      while (attempts < maxAttempts) {
+        attempts++;
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 45000); // 45s for Render free-tier cold boot
 
-        const data = await response.json();
-        typingIndicator.classList.add("hidden");
-        isThinking = false;
-        sendBtn.disabled = false;
+          const response = await fetch(`${API_BASE_URL}/chat`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            signal: controller.signal,
+            body: JSON.stringify({
+              message: query,
+              thread_id: threadId
+            })
+          });
 
-        appendMessage("assistant", data.response, {
-          type: data.type,
-          url: data.url,
-          quick_actions: data.quick_actions
-        });
+          clearTimeout(timeoutId);
 
-      } catch (err) {
-        console.error("Chatbot API Error:", err);
-        typingIndicator.classList.add("hidden");
-        isThinking = false;
-        sendBtn.disabled = false;
-
-        appendMessage(
-          "assistant",
-          "I'm having trouble communicating with the server right now. If you need to contact Neeraj directly, please use the Contact Us section on the page!",
-          {
-            quick_actions: ["Who is Neeraj?", "Skills", "Resume"]
+          if (!response.ok) {
+            throw new Error(`Server returned status: ${response.status}`);
           }
-        );
+
+          const data = await response.json();
+          typingIndicator.classList.add("hidden");
+          isThinking = false;
+          sendBtn.disabled = false;
+
+          appendMessage("assistant", data.response, {
+            type: data.type,
+            url: data.url,
+            quick_actions: data.quick_actions
+          });
+          return;
+
+        } catch (err) {
+          lastError = err;
+          console.warn(`Chatbot attempt ${attempts} failed:`, err);
+          if (attempts < maxAttempts) {
+            // Wait 2s and retry in case server was just spinning up from sleep
+            await new Promise(r => setTimeout(r, 2000));
+          }
+        }
       }
+
+      console.error("Chatbot API Error after retries:", lastError);
+      typingIndicator.classList.add("hidden");
+      isThinking = false;
+      sendBtn.disabled = false;
+
+      appendMessage(
+        "assistant",
+        "I'm having trouble communicating with the server right now. The server might be waking up from sleep mode—please try again in a few seconds or use the Contact Us section on the page!",
+        {
+          quick_actions: ["Who is Neeraj?", "Skills", "Resume"]
+        }
+      );
     }
 
     // Form submit handler
