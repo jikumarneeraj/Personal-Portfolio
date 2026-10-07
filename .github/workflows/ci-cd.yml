@@ -1,0 +1,86 @@
+name: CI/CD Pipeline - Deploy to Vercel
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  verify:
+    name: Build & Verify (CI)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Frontend Dependencies
+        run: npm ci
+
+      - name: Build Frontend (Vite)
+        run: npm run build
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify Backend Syntax
+        run: |
+          python -m py_compile backend/app/main.py
+          python -m py_compile backend/app/config.py
+          python -m py_compile backend/app/graph.py
+          python -m py_compile backend/app/nodes.py
+          python -m py_compile backend/app/tools.py
+
+  deploy-vercel:
+    name: Deploy to Vercel (CD)
+    needs: verify
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Check for Vercel Secrets
+        id: check-secrets
+        run: |
+          if [ -n "${{ secrets.VERCEL_TOKEN }}" ]; then
+            echo "has_token=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_token=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Deploy to Vercel (via Vercel Action)
+        if: steps.check-secrets.outputs.has_token == 'true'
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+          working-directory: ./
+
+      - name: Note on Vercel Git Integration
+        if: steps.check-secrets.outputs.has_token == 'false'
+        run: |
+          echo "=================================================================================="
+          echo "INFO: VERCEL_TOKEN secret is not set in GitHub Repository Secrets."
+          echo "If your repository is connected to Vercel via the Vercel Dashboard (GitHub App),"
+          echo "Vercel automatically builds and deploys every commit to 'main' using vercel.json!"
+          echo ""
+          echo "To enable direct deployment via this GitHub Action instead:"
+          echo "1. Go to repository Settings -> Secrets and variables -> Actions"
+          echo "2. Add VERCEL_TOKEN, VERCEL_ORG_ID, and VERCEL_PROJECT_ID"
+          echo "=================================================================================="
