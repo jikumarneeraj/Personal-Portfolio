@@ -5,13 +5,22 @@
 // 1. Projects Database
 const projectsData = [
   {
-    id: "amrit-pharmacy",
-    title: "AMRIT Pharmacy Optimization",
+    id: "cold-chain-logistics",
+    title: "Cold Chain Logistics FDE Project",
     category: "data-science",
-    desc: "Analyzed 56K+ sales records using Python to identify demand trends, ABC inventory segments, and revenue drivers, proposing data-driven inventory and operational improvements for KGMU Lucknow.",
-    tags: ["Python", "Pandas", "NumPy", "Data Analysis", "ABC Analysis"],
-    link: "https://github.com/jikumarneeraj/Service-and-Operational-Optimization-of-AMRIT-Pharmacy-at-KGMU",
+    desc: "Engineered an end-to-end cold-chain logistics analytics and monitoring system to track perishable shipments, temperature fluctuations, transit timelines, and delivery integrity using data engineering pipelines.",
+    tags: ["Python", "Data Engineering", "Logistics Analytics", "Data Pipelines", "SQL"],
+    link: "https://github.com/jikumarneeraj/cold-chain-logistics-FDE-Project",
     linkLabel: "GitHub Repo"
+  },
+  {
+    id: "verdeza",
+    title: "Verdeza – Smart Waste Management & Recycling Platform",
+    category: "software",
+    desc: "Collaborative platform engineered for modern automated waste lifecycle tracking, eco-incentives, intelligent recycling routing, and sustainable urban waste management.",
+    tags: ["Full Stack", "Python", "Web Platform", "Smart City", "Collaboration"],
+    link: "https://github.com/sharib-ahmad/Verdeza",
+    linkLabel: "GitHub Repo (Team)"
   },
   {
     id: "kidney-disease",
@@ -32,6 +41,15 @@ const projectsData = [
     linkLabel: "Kaggle Challenge"
   },
   {
+    id: "quiz-master",
+    title: "Quiz Master Web Platform",
+    category: "software",
+    desc: "Built a production-grade full-stack quiz management system featuring role-based access, REST APIs, background job dispatching, and cache optimization.",
+    tags: ["Flask", "Vue.js", "SQLite", "Redis", "Celery", "REST API"],
+    link: "https://github.com/23f2002096/quiz_master_v2",
+    linkLabel: "GitHub Repo"
+  },
+  {
     id: "survival-detection",
     title: "Survival Detection (ML)",
     category: "ml-nlp",
@@ -41,6 +59,15 @@ const projectsData = [
     linkLabel: "Kaggle Challenge"
   },
   {
+    id: "amrit-pharmacy",
+    title: "AMRIT Pharmacy Optimization",
+    category: "data-science",
+    desc: "Analyzed 56K+ sales records using Python to identify demand trends, ABC inventory segments, and revenue drivers, proposing data-driven inventory and operational improvements for KGMU Lucknow.",
+    tags: ["Python", "Pandas", "NumPy", "Data Analysis", "ABC Analysis"],
+    link: "https://github.com/jikumarneeraj/Service-and-Operational-Optimization-of-AMRIT-Pharmacy-at-KGMU",
+    linkLabel: "GitHub Repo"
+  },
+  {
     id: "cost-dashboard",
     title: "IT & Business Cost Dashboard",
     category: "data-science",
@@ -48,15 +75,6 @@ const projectsData = [
     tags: ["Power BI", "Excel", "Data Modeling", "Business Intelligence"],
     link: "https://drive.google.com/drive/folders/1uu-IKaIeoqb-fPW-SN5Z71O_G2DJJhcD",
     linkLabel: "Google Drive Folder"
-  },
-  {
-    id: "quiz-master",
-    title: "Quiz Master Web Platform",
-    category: "software",
-    desc: "Built a production-grade full-stack quiz management system featuring role-based access, REST APIs, background job dispatching, and cache optimization.",
-    tags: ["Flask", "Vue.js", "SQLite", "Redis", "Celery", "REST API"],
-    link: "https://github.com/23f2002096/quiz_master_v2",
-    linkLabel: "GitHub Repo"
   },
   {
     id: "whatsapp-chat",
